@@ -19,6 +19,17 @@ npm install
 npm run dev
 ```
 
+## Deployment
+
+This project is configured for deployment on Netlify. To deploy:
+
+1. Push your code to GitHub
+2. Connect your repository to Netlify
+3. Configure environment variables in Netlify dashboard (see `.env.example`)
+4. Deploy!
+
+The site will automatically deploy when you push to the main branch.
+
 ## Tech Stack
 
 - React 18
