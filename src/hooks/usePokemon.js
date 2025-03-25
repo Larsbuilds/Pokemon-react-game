@@ -36,6 +36,44 @@ export function usePokemonList(page = 1, itemsPerPage = 12) {
   const [currentOffset, setCurrentOffset] = useState(0)
   const totalPokemon = 151 // First generation Pokemon count
 
+  // Function to fetch Pokemon details including types
+  const fetchPokemonDetails = async (pokemonList) => {
+    try {
+      const details = await Promise.all(
+        pokemonList.map(async (p) => {
+          const response = await axios.get(p.url)
+          
+          // Fetch type data for weaknesses
+          const typePromises = response.data.types.map(async (type) => {
+            const typeResponse = await axios.get(type.type.url)
+            return typeResponse.data.damage_relations.double_damage_from.map(w => w.name)
+          })
+          
+          const weaknessesArrays = await Promise.all(typePromises)
+          const weaknesses = [...new Set(weaknessesArrays.flat())] // Remove duplicates
+
+          return {
+            ...p,
+            id: response.data.id,
+            name: response.data.name,
+            types: response.data.types.map(type => type.type.name),
+            weaknesses,
+            number: response.data.id,
+            height: response.data.height,
+            weight: response.data.weight,
+            abilities: response.data.abilities.map(a => a.ability.name),
+            sprites: response.data.sprites,
+            stats: response.data.stats
+          }
+        })
+      )
+      return details
+    } catch (error) {
+      console.error('Error fetching pokemon details:', error)
+      return pokemonList
+    }
+  }
+
   // Initial load of first page
   useEffect(() => {
     const fetchInitialData = async () => {
@@ -43,7 +81,8 @@ export function usePokemonList(page = 1, itemsPerPage = 12) {
         setLoading(true)
         setError(null)
         const res = await axios.get(`https://pokeapi.co/api/v2/pokemon?limit=${itemsPerPage}&offset=0`)
-        setPokemon(res.data.results)
+        const pokemonWithDetails = await fetchPokemonDetails(res.data.results)
+        setPokemon(pokemonWithDetails)
         setCurrentOffset(itemsPerPage)
         setHasMore(currentOffset < totalPokemon)
       } catch (error) {
@@ -66,8 +105,9 @@ export function usePokemonList(page = 1, itemsPerPage = 12) {
       try {
         setIsLoadingAll(true)
         const res = await axios.get(`https://pokeapi.co/api/v2/pokemon?limit=${totalPokemon}&offset=0`)
+        const pokemonWithDetails = await fetchPokemonDetails(res.data.results)
         if (isMounted) {
-          setAllPokemon(res.data.results)
+          setAllPokemon(pokemonWithDetails)
         }
       } catch (error) {
         console.error('Error fetching all pokemon:', error)
@@ -92,7 +132,8 @@ export function usePokemonList(page = 1, itemsPerPage = 12) {
       try {
         setLoading(true)
         const res = await axios.get(`https://pokeapi.co/api/v2/pokemon?limit=${itemsPerPage}&offset=${currentOffset}`)
-        setPokemon(prev => [...prev, ...res.data.results])
+        const pokemonWithDetails = await fetchPokemonDetails(res.data.results)
+        setPokemon(prev => [...prev, ...pokemonWithDetails])
         setCurrentOffset(prev => prev + itemsPerPage)
         setHasMore(currentOffset + itemsPerPage < totalPokemon)
       } catch (error) {

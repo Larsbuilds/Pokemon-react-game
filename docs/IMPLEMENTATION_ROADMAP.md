@@ -20,6 +20,8 @@
 - Loading state optimizations
 
 ## Priority List
+
+##Phase 1
 1. **HIGHEST** - Core Pokédex Features
    - [x] Type badge system
    - [x] Pokédex number formatting
@@ -33,6 +35,7 @@
    - [x] Search feedback improvements
    - [x] Loading states refinement
 
+##Phase 2
 3. **MEDIUM** - Performance & Polish
    - [x] Performance optimizations (background loading)
    - [x] Request debouncing
@@ -42,10 +45,27 @@
    - [x] Image loading optimization
    - [x] Visual polish and animations
 
-4. **LOW** - Advanced Features
-   - [ ] Advanced search panel
-   - [ ] Type filtering system
-   - [ ] Additional filter options
+##Phase 3
+4. **HIGH** - Advanced Search Features (In Progress)
+   See `docs/ADVANCED_SEARCH_SPEC.md` and `docs/IMPLEMENTATION_PLAN.md` for detailed specifications
+   - [x] Type & Weakness System
+     - [x] Type toggle buttons
+     - [x] Weakness indicators
+     - [x] Type-specific styling
+     - [ ] UI/UX improvements
+       - [ ] Better visual feedback for active filters
+       - [ ] Improved filter panel layout
+       - [ ] Filter count indicators
+   - [ ] Ability Filter System
+     - [ ] Ability dropdown
+     - [ ] API integration
+   - [ ] Physical Characteristics
+     - [ ] Height filter
+     - [ ] Weight filter
+   - [ ] Enhanced UI Components
+     - [ ] Number range refinement
+     - [ ] Search actions
+     - [ ] Responsive design
 
 ## Phase 1: Core Pokédex Enhancement (✅ Complete)
 - [x] Type Badge System
@@ -90,17 +110,13 @@
   - [x] Polish hover interactions
 
 ## Phase 3: Advanced Features (In Progress)
-- [ ] Advanced Search Panel
-  - [ ] Create expandable section
-  - [ ] Implement type filters
-  - [ ] Add number range filter
-  - [ ] Add physical characteristic filters
-
-- [ ] Enhanced Filtering
-  - [ ] Type-based filtering
-  - [ ] Multiple filter combination
-  - [ ] Filter persistence
-  - [ ] Filter reset functionality
+See `docs/IMPLEMENTATION_PLAN.md` for detailed implementation steps
+- [ ] Advanced Search Implementation
+  - [ ] Phase 1: Type & Weakness System
+  - [ ] Phase 2: Ability Filter
+  - [ ] Phase 3: Physical Characteristics
+  - [ ] Phase 4: UI Polish
+  - [ ] Phase 5: Integration & Testing
 
 ## Phase 4: Future Enhancements
 - [ ] Favorites System
@@ -121,6 +137,7 @@
   - [x] Test card layout
   - [x] Test error handling
   - [x] Test performance optimizations
+  - [ ] Test advanced search features
 
 - [ ] Performance Tests
   - [ ] Load testing

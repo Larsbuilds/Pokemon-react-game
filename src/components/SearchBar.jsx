@@ -1,22 +1,57 @@
-import { useState, useEffect } from 'react'
-import { useDebounce } from '../hooks/useDebounce'
+import { useState, useCallback } from 'react'
+import { FaSearch, FaSlidersH } from 'react-icons/fa'
+import AdvancedSearchPanel from './AdvancedSearchPanel'
+
+const initialFilters = {
+  types: Object.keys({
+    bug: '#92BC2C',
+    dragon: '#0C69C8',
+    fairy: '#EE90E6',
+    fire: '#FBA54C',
+    ghost: '#5F6DBC',
+    ground: '#E0C068',
+    normal: '#A8A878',
+    psychic: '#F85888',
+    steel: '#B8B8D0',
+    dark: '#705848',
+    electric: '#F8D030',
+    fighting: '#C03028',
+    flying: '#A890F0',
+    grass: '#78C850',
+    ice: '#98D8D8',
+    poison: '#A040A0',
+    rock: '#B8A038',
+    water: '#6890F0'
+  }).reduce((acc, type) => ({
+    ...acc,
+    [type]: { isType: false, isWeakness: false }
+  }), {}),
+  ability: '',
+  height: null,
+  weight: null,
+  numberRange: { min: '', max: '' }
+}
 
 export default function SearchBar({ 
   onSearch, 
+  onFilterChange,
   placeholder = "Enter a Pokemon name or number (e.g., 'Pikachu' or '25')"
 }) {
   const [searchTerm, setSearchTerm] = useState('')
   const [isFocused, setIsFocused] = useState(false)
-  const debouncedSearchTerm = useDebounce(searchTerm, 300)
+  const [isAdvancedSearchExpanded, setIsAdvancedSearchExpanded] = useState(false)
+  const [filters, setFilters] = useState(initialFilters)
 
-  useEffect(() => {
-    handleSearch(debouncedSearchTerm)
-  }, [debouncedSearchTerm])
-
-  const handleSearch = (value) => {
+  const handleSearchChange = (e) => {
+    const value = e.target.value
     setSearchTerm(value)
     onSearch(value)
   }
+
+  const handleFilterChange = useCallback((newFilters) => {
+    setFilters(newFilters)
+    onFilterChange(newFilters)
+  }, [onFilterChange])
 
   return (
     <div className="w-full max-w-2xl mx-auto">
@@ -41,11 +76,11 @@ export default function SearchBar({
           id="pokemon-search"
           name="pokemon-search"
           value={searchTerm}
-          onChange={(e) => handleSearch(e.target.value)}
+          onChange={handleSearchChange}
           onFocus={() => setIsFocused(true)}
           onBlur={() => setIsFocused(false)}
           placeholder={placeholder}
-          className="w-full pl-10 pr-12 py-3 rounded-lg border border-gray-300 
+          className="w-full pl-10 pr-24 py-3 rounded-lg border border-gray-300 
             focus:outline-none focus:ring-2 focus:ring-pokemon-blue focus:border-transparent 
             transition-all duration-200 shadow-sm hover:shadow-md
             [&::-webkit-search-cancel-button]:appearance-none 
@@ -56,10 +91,17 @@ export default function SearchBar({
           aria-label="Search Pokemon"
           autoComplete="off"
         />
-        <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
+        <div className="absolute inset-y-0 right-0 pr-3 flex items-center space-x-2">
+          <button
+            onClick={() => setIsAdvancedSearchExpanded(!isAdvancedSearchExpanded)}
+            className="text-gray-400 hover:text-gray-600 transition-colors duration-200"
+            aria-label="Toggle advanced search"
+          >
+            <FaSlidersH />
+          </button>
           {searchTerm && (
             <button
-              onClick={() => handleSearch('')}
+              onClick={() => handleSearchChange({ target: { value: '' } })}
               className="text-gray-400 hover:text-gray-600 transition-colors duration-200"
               aria-label="Clear search"
             >
@@ -79,6 +121,13 @@ export default function SearchBar({
           )}
         </div>
       </div>
+
+      <AdvancedSearchPanel
+        isExpanded={isAdvancedSearchExpanded}
+        onToggleExpand={setIsAdvancedSearchExpanded}
+        onFilterChange={handleFilterChange}
+        filters={filters}
+      />
     </div>
   )
 } 

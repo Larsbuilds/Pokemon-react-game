@@ -1,4 +1,4 @@
-# Advanced Search Implementation
+# Advanced Search Specification
 
 ## Overview
 The advanced search feature provides users with comprehensive filtering capabilities for the Pokédex, including type filtering, ability selection, physical characteristics, and number range filtering.
@@ -95,27 +95,5 @@ const typeColors = {
 };
 ```
 
-## Implementation Phases
-
-### Phase 1: Core Structure
-1. Advanced Search container with expand/collapse
-2. Filter state management setup
-3. SearchBar integration with advanced toggle
-
-### Phase 2: Filter Components
-4. TypeFilter with toggle buttons
-5. NumberRange filter implementation
-6. Height/Weight filter components
-7. Ability dropdown integration
-
-### Phase 3: Integration
-8. API connection
-9. Filter combination logic
-10. Reset functionality
-11. Loading states
-
-### Phase 4: Polish
-12. Type badge styling
-13. Responsive design
-14. Error handling
-15. Filter state persistence 
+## Implementation
+See `IMPLEMENTATION_PLAN.md` for detailed implementation steps and phases. 
