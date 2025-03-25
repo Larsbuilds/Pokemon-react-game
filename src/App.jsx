@@ -1,11 +1,11 @@
-import { BrowserRouter as Router, Routes, Route, Navigate, Link } from 'react-router-dom'
+import { HashRouter as Router, Routes, Route, Navigate, Link } from 'react-router-dom'
 import Home from './pages/Home'
 import Detail from './pages/Detail'
 import ErrorBoundary from './components/ErrorBoundary'
 
 function App() {
   return (
-    <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
+    <Router>
       <ErrorBoundary>
         <div className="min-h-screen bg-gray-50">
           <header className="bg-gradient-to-r from-pokemon-red to-pokemon-blue text-white shadow-lg sticky top-0 z-50">
