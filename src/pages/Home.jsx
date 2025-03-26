@@ -81,6 +81,39 @@ export default function Home() {
       return false;
     }
 
+    // Height filter
+    if (activeFilters.height) {
+      const height = pokemon.height / 10; // Convert to meters
+      switch (activeFilters.height) {
+        case 'small':
+          if (height > 0.5) return false;
+          break;
+        case 'medium':
+          if (height <= 0.5 || height > 1.5) return false;
+          break;
+        case 'large':
+          if (height <= 1.5) return false;
+          break;
+      }
+    }
+
+    // Weight filter
+    if (activeFilters.weight) {
+      const weight = pokemon.weight / 10; // Convert from hectograms to kg
+      console.log(`Pokemon: ${pokemon.name}, Weight: ${weight}kg, Filter: ${activeFilters.weight}`); // Debug log
+      switch (activeFilters.weight) {
+        case 'light':
+          if (weight > 10) return false;
+          break;
+        case 'medium':
+          if (weight <= 10 || weight > 50) return false;
+          break;
+        case 'heavy':
+          if (weight <= 50) return false;
+          break;
+      }
+    }
+
     // Number range filter
     if (activeFilters.numberRange.min && pokemon.number < parseInt(activeFilters.numberRange.min)) {
       return false;

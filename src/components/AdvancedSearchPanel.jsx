@@ -1,6 +1,7 @@
 import { useCallback, memo } from 'react'
 import TypeFilter from './AdvancedSearch/TypeFilter'
 import AbilitySelect from './AdvancedSearch/AbilitySelect'
+import PhysicalCharacteristics from './AdvancedSearch/PhysicalCharacteristics'
 
 const allTypes = Object.keys({
   bug: '#92BC2C',
@@ -60,6 +61,20 @@ function AdvancedSearchPanel({
     });
   }, [filters, onFilterChange]);
 
+  const handleHeightChange = useCallback((height) => {
+    onFilterChange({
+      ...filters,
+      height: filters.height === height ? null : height
+    });
+  }, [filters, onFilterChange]);
+
+  const handleWeightChange = useCallback((weight) => {
+    onFilterChange({
+      ...filters,
+      weight: filters.weight === weight ? null : weight
+    });
+  }, [filters, onFilterChange]);
+
   const handleNumberRangeChange = useCallback((field, value) => {
     onFilterChange({
       ...filters,
@@ -91,36 +106,13 @@ function AdvancedSearchPanel({
           <AbilitySelect onAbilityChange={handleAbilityChange} />
         </div>
 
-        {/* Height & Weight Filters */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <div>
-            <h3 className="text-2xl font-semibold text-white mb-4">Height</h3>
-            <div className="grid grid-cols-3 gap-4">
-              {[1, 2, 3].map((size) => (
-                <button
-                  key={size}
-                  className="aspect-square bg-white rounded-lg p-4 hover:ring-2 hover:ring-pokemon-blue focus:outline-none focus:ring-2 focus:ring-pokemon-blue"
-                >
-                  {/* Height silhouette placeholder */}
-                </button>
-              ))}
-            </div>
-          </div>
-          
-          <div>
-            <h3 className="text-2xl font-semibold text-white mb-4">Weight</h3>
-            <div className="grid grid-cols-3 gap-4">
-              {[1, 2, 3].map((weight) => (
-                <button
-                  key={weight}
-                  className="aspect-square bg-white rounded-lg p-4 hover:ring-2 hover:ring-pokemon-blue focus:outline-none focus:ring-2 focus:ring-pokemon-blue"
-                >
-                  {/* Weight dots placeholder */}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
+        {/* Physical Characteristics */}
+        <PhysicalCharacteristics
+          selectedHeight={filters.height}
+          selectedWeight={filters.weight}
+          onHeightChange={handleHeightChange}
+          onWeightChange={handleWeightChange}
+        />
 
         {/* Number Range */}
         <div>
