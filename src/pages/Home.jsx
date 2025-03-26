@@ -76,6 +76,11 @@ export default function Home() {
       if (!matchesWeakness) return false;
     }
 
+    // Ability filter
+    if (activeFilters.ability && !pokemon.abilities?.includes(activeFilters.ability)) {
+      return false;
+    }
+
     // Number range filter
     if (activeFilters.numberRange.min && pokemon.number < parseInt(activeFilters.numberRange.min)) {
       return false;

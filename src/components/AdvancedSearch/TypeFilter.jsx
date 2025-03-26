@@ -1,59 +1,92 @@
+import { memo } from 'react';
 import TypeBadge from '../TypeBadge';
 
 const typeColors = {
   bug: '#92BC2C',
+  dark: '#595761',
   dragon: '#0C69C8',
+  electric: '#F2D94E',
   fairy: '#EE90E6',
+  fighting: '#D3425F',
   fire: '#FBA54C',
+  flying: '#A1BBEC',
   ghost: '#5F6DBC',
-  ground: '#E0C068',
-  normal: '#A8A878',
-  psychic: '#F85888',
-  steel: '#B8B8D0',
-  dark: '#705848',
-  electric: '#F8D030',
-  fighting: '#C03028',
-  flying: '#A890F0',
-  grass: '#78C850',
-  ice: '#98D8D8',
-  poison: '#A040A0',
-  rock: '#B8A038',
-  water: '#6890F0'
+  grass: '#5FBD58',
+  ground: '#DA7C4D',
+  ice: '#75D0C1',
+  normal: '#A0A29F',
+  poison: '#B763CF',
+  psychic: '#FA8581',
+  rock: '#C9BB8A',
+  steel: '#5695A3',
+  water: '#539DDF'
 };
 
 const allTypes = Object.keys(typeColors);
 
-export default function TypeFilter({ typeStates, onTypeToggle }) {
+const TypeToggleButton = memo(({ selected, type, onClick, label }) => (
+  <button
+    onClick={onClick}
+    aria-pressed={selected}
+    aria-label={`Toggle ${label} for ${type}`}
+    className={`
+      w-6 h-6 rounded-full border-2 transition-all duration-200
+      flex items-center justify-center text-sm font-medium
+      ${selected 
+        ? 'bg-pokemon-blue border-pokemon-blue text-white' 
+        : 'bg-white border-gray-300 text-gray-600 hover:border-gray-400'
+      }
+    `}
+  >
+    {label}
+  </button>
+));
+
+const TypeButton = memo(({ type, color }) => (
+  <div
+    className="h-10 rounded-lg flex items-center justify-center text-white font-semibold shadow-sm"
+    style={{ backgroundColor: color }}
+  >
+    {type.charAt(0).toUpperCase() + type.slice(1)}
+  </div>
+));
+
+function TypeFilter({ typeStates, onTypeToggle }) {
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-semibold text-gray-800">Type & Weakness</h3>
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+      <div className="flex items-center justify-between">
+        <h3 className="text-2xl font-semibold text-white">Type & Weakness</h3>
+        <div className="flex items-center space-x-2 text-white">
+          <span>T = Type</span>
+          <span>W = Weakness</span>
+        </div>
+      </div>
+      
+      <div className="grid grid-cols-2 gap-3">
         {allTypes.map(type => (
-          <div key={type} className="flex flex-col items-center space-y-2">
-            <div className="flex space-x-2">
-              <button
-                onClick={() => onTypeToggle(type, 'isType')}
-                className={`px-2 py-1 rounded text-sm font-medium transition-colors
-                  ${typeStates[type]?.isType 
-                    ? 'bg-blue-500 text-white' 
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
-              >
-                T
-              </button>
-              <button
-                onClick={() => onTypeToggle(type, 'isWeakness')}
-                className={`px-2 py-1 rounded text-sm font-medium transition-colors
-                  ${typeStates[type]?.isWeakness 
-                    ? 'bg-red-500 text-white' 
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}
-              >
-                W
-              </button>
+          <div key={type} className="flex items-center space-x-2">
+            <div className="flex-1">
+              <TypeButton type={type} color={typeColors[type]} />
             </div>
-            <TypeBadge type={type} />
+            <div className="flex space-x-2">
+              <TypeToggleButton
+                type={type}
+                label="T"
+                selected={typeStates[type]?.isType}
+                onClick={() => onTypeToggle(type, 'isType')}
+              />
+              <TypeToggleButton
+                type={type}
+                label="W"
+                selected={typeStates[type]?.isWeakness}
+                onClick={() => onTypeToggle(type, 'isWeakness')}
+              />
+            </div>
           </div>
         ))}
       </div>
     </div>
   );
-} 
+}
+
+export default memo(TypeFilter); 
