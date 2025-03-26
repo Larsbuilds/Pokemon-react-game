@@ -123,9 +123,9 @@
 ## Phase 3: Advanced Features (In Progress)
 See `docs/IMPLEMENTATION_PLAN.md` for detailed implementation steps
 - [ ] Advanced Search Implementation
-  - [ ] Phase 1: Type & Weakness System
-  - [ ] Phase 2: Ability Filter
-  - [ ] Phase 3: Physical Characteristics
+  - [x] Phase 1: Type & Weakness System ✅
+  - [x] Phase 2: Ability Filter ✅
+  - [ ] Phase 3: Physical Characteristics (Next Up)
   - [ ] Phase 4: UI Polish
   - [ ] Phase 5: Integration & Testing
 
