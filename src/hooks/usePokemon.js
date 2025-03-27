@@ -32,6 +32,15 @@ export function usePokemon(name) {
           ?.flavor_text
           .replace(/[\n\f]/g, ' ') || 'No description available.'
 
+        // Fetch version data
+        const versionResponse = await axios.get('https://pokeapi.co/api/v2/version')
+        const versions = versionResponse.data.results
+          .filter(version => version.name.includes('red') || version.name.includes('blue'))
+          .map(version => ({
+            name: version.name,
+            url: version.url
+          }))
+
         setPokemon({
           ...response.data,
           weaknesses,
@@ -47,7 +56,9 @@ export function usePokemon(name) {
           base_happiness: speciesResponse.data.base_happiness,
           habitat: speciesResponse.data.habitat,
           growth_rate: speciesResponse.data.growth_rate,
-          generation: speciesResponse.data.generation
+          generation: speciesResponse.data.generation,
+          // Version data
+          versions
         })
       } catch (error) {
         setError(error)

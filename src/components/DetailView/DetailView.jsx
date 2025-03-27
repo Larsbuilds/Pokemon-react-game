@@ -89,7 +89,7 @@ export function DetailView({ pokemonName }) {
 
                 {/* Version Badges */}
                 <div>
-                  <VersionBadges />
+                  <VersionBadges versions={pokemon.versions} />
                 </div>
               </div>
             </div>
