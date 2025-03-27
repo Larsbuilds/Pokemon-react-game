@@ -25,7 +25,7 @@ export function usePokemon(name) {
         const weaknessesArrays = await Promise.all(typePromises)
         const weaknesses = [...new Set(weaknessesArrays.flat().map(JSON.stringify))].map(JSON.parse)
 
-        // Fetch species data for description
+        // Fetch species data for description and additional info
         const speciesResponse = await axios.get(response.data.species.url)
         const description = speciesResponse.data.flavor_text_entries
           .find(entry => entry.language.name === 'en')
@@ -38,7 +38,16 @@ export function usePokemon(name) {
           description,
           category: speciesResponse.data.genera
             .find(genus => genus.language.name === 'en')
-            ?.genus || 'Unknown'
+            ?.genus || 'Unknown',
+          // Additional species data
+          egg_groups: speciesResponse.data.egg_groups,
+          hatch_counter: speciesResponse.data.hatch_counter,
+          gender_rate: speciesResponse.data.gender_rate,
+          capture_rate: speciesResponse.data.capture_rate,
+          base_happiness: speciesResponse.data.base_happiness,
+          habitat: speciesResponse.data.habitat,
+          growth_rate: speciesResponse.data.growth_rate,
+          generation: speciesResponse.data.generation
         })
       } catch (error) {
         setError(error)

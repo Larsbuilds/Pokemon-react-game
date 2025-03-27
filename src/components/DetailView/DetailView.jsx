@@ -9,6 +9,7 @@ import { EvolutionChain } from './EvolutionChain'
 import { BasicInfo } from './BasicInfo'
 import { WeaknessesSection } from './WeaknessesSection'
 import { VersionBadges } from './VersionBadges'
+import { AdditionalInfo } from './AdditionalInfo'
 
 export function DetailView({ pokemonName }) {
   const { pokemon, loading, error } = usePokemon(pokemonName)
@@ -99,6 +100,9 @@ export function DetailView({ pokemonName }) {
         <div className="mt-8">
           <EvolutionChain pokemonId={pokemon.id} />
         </div>
+
+        {/* Additional Information - Full Width */}
+        <AdditionalInfo pokemon={pokemon} />
       </div>
     </div>
   )

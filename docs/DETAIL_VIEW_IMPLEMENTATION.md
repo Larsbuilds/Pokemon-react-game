@@ -1,7 +1,7 @@
 # Detail View Implementation
 
 ## Overview
-This document outlines the implementation plan for the Pokemon detail view, which includes stats visualization, type information, weaknesses, and evolution chain.
+This document outlines the implementation plan for the Pokemon detail view, which includes stats visualization, type information, weaknesses, evolution chain, and additional Pokemon data.
 
 ## Components Breakdown
 
@@ -48,6 +48,9 @@ This document outlines the implementation plan for the Pokemon detail view, whic
   - [x] Style with dark striped background
   - [x] Implement proper spacing and layout
   - [x] Add responsive design for mobile view
+  - [x] Add interactive hover effects
+  - [x] Implement smooth transitions
+  - [x] Add visual feedback for clickable items
 
 ### 4. API Integration ✅
 - [x] Basic Pokemon API service
@@ -61,6 +64,11 @@ This document outlines the implementation plan for the Pokemon detail view, whic
 - [x] Create new API hooks
   - [x] `useEvolutionChain` hook with proper caching
   - [x] `usePokemonStats` hook (partially implemented in usePokemon)
+- [x] Species Data Integration
+  - [x] Fetch Pokemon descriptions from species endpoint
+  - [x] Add proper category/genus information
+  - [x] Handle missing data gracefully
+  - [x] Clean up text formatting
 
 ### 5. Layout & Styling ✅
 - [x] Create responsive grid layout
@@ -72,6 +80,10 @@ This document outlines the implementation plan for the Pokemon detail view, whic
   - [x] Unified type and weakness badge appearance
   - [x] Proper hover effects and transitions
   - [x] Consistent sizing across all badges
+- [x] Add interactive elements
+  - [x] Hover effects for clickable items
+  - [x] Smooth transitions for all interactions
+  - [x] Visual feedback for user actions
 
 ### 6. Performance Optimization ✅
 - [x] Implement lazy loading for images (OptimizedImage component exists)
@@ -80,6 +92,10 @@ This document outlines the implementation plan for the Pokemon detail view, whic
 - [x] Optimize re-renders for detail view
 - [x] Add localStorage caching for evolution chain data
 - [x] Handle loading and error states properly
+- [x] Optimize API calls
+  - [x] Combine related data fetching
+  - [x] Cache species data
+  - [x] Handle concurrent requests efficiently
 
 ### 7. Testing
 - [ ] Unit tests for stat calculations
@@ -97,8 +113,12 @@ This document outlines the implementation plan for the Pokemon detail view, whic
   - [ ] Test tooltip behavior
   - [ ] Check keyboard navigation
   - [ ] Verify accessibility features
+- [ ] Test species data integration
+  - [ ] Verify description loading
+  - [ ] Test category display
+  - [ ] Check error handling
 
-### 8. Polish & Accessibility
+### 8. Polish & Accessibility ✅
 - [x] Add tooltips for stats
 - [x] Implement keyboard navigation
 - [x] Add proper ARIA labels
@@ -106,6 +126,37 @@ This document outlines the implementation plan for the Pokemon detail view, whic
 - [x] Add loading and error states (components exist)
 - [ ] Add tooltips for weakness multipliers
 - [x] Improve focus indicators for interactive elements
+- [x] Add smooth transitions for all interactions
+- [x] Implement proper hover states
+- [x] Ensure consistent visual feedback
+
+### 9. Additional Information Section ✅
+- [x] Create `AdditionalInfo` component
+  - [x] Implement responsive grid layout
+  - [x] Add breeding information section
+    - [x] Display egg groups
+    - [x] Show egg cycles
+    - [x] Format gender rates
+  - [x] Add habitat & growth section
+    - [x] Show habitat information
+    - [x] Display growth rate
+    - [x] Show base experience
+  - [x] Add capture & happiness section
+    - [x] Calculate and display capture rate
+    - [x] Show base happiness
+    - [x] Display generation information
+  - [x] Implement proper data formatting
+    - [x] Convert rates to percentages
+    - [x] Handle missing data
+    - [x] Format text properly
+  - [x] Add consistent styling
+    - [x] Match existing design system
+    - [x] Use proper spacing
+    - [x] Implement responsive design
+  - [x] Ensure accessibility
+    - [x] Add proper ARIA labels
+    - [x] Maintain color contrast
+    - [x] Support keyboard navigation
 
 ## Implementation Priority
 1. ✅ Evolution Chain API Integration (Foundation)
@@ -115,7 +166,8 @@ This document outlines the implementation plan for the Pokemon detail view, whic
 5. ✅ Layout & Styling
 6. ✅ Performance Optimization
 7. Testing
-8. Polish & Accessibility
+8. ✅ Polish & Accessibility
+9. ✅ Additional Information Section
 
 ## Notes
 - Each component should be developed with mobile-first approach
@@ -138,6 +190,9 @@ This document outlines the implementation plan for the Pokemon detail view, whic
    - Level indicators above evolution arrows
    - Dark striped background for container
    - Responsive layout for all screen sizes
+   - Interactive hover effects
+   - Smooth transitions
+   - Visual feedback for interactions
 
 3. Performance Considerations:
    - Cache evolution data to reduce API calls
@@ -163,7 +218,7 @@ This document outlines the implementation plan for the Pokemon detail view, whic
 3. Performance:
    - Efficient color mapping
    - Smooth transitions
-   - Optimized re-renders 
+   - Optimized re-renders
 
 ## Stats Section Implementation Details
 1. Component Structure:
@@ -191,4 +246,23 @@ This document outlines the implementation plan for the Pokemon detail view, whic
    - Optimized animations
    - Proper cleanup of event listeners
    - Loading state handling
-   - Error state management 
+   - Error state management
+
+## Species Data Integration Details
+1. Data Fetching:
+   - Fetch species data from Pokemon endpoint
+   - Extract English descriptions
+   - Get category/genus information
+   - Handle missing data gracefully
+
+2. Text Processing:
+   - Clean up description text
+   - Remove newlines and form feeds
+   - Handle special characters
+   - Provide fallback text
+
+3. Performance:
+   - Cache species data
+   - Optimize API calls
+   - Handle concurrent requests
+   - Implement proper error handling 
