@@ -5,6 +5,7 @@ import SearchBar from '../components/SearchBar'
 import LoadingSpinner from '../components/LoadingSpinner'
 import { usePokemonList } from '../hooks/usePokemon'
 import ErrorMessage from '../components/ErrorMessage'
+import { useDebounce } from '../hooks/useDebounce'
 
 const initialFilters = {
   types: Object.keys({
@@ -41,6 +42,7 @@ export default function Home() {
   const [searchTerm, setSearchTerm] = useState('')
   const [activeFilters, setActiveFilters] = useState(initialFilters)
   const { pokemon, loading, error, hasMore, isLoadingAll, currentOffset, totalPokemon } = usePokemonList(page)
+  const debouncedSearchTerm = useDebounce(searchTerm, 500)
 
   const handleSearch = useCallback((term) => {
     setSearchTerm(term)
@@ -54,8 +56,15 @@ export default function Home() {
     if (!pokemon) return false;
 
     // Search term filter
-    if (searchTerm && !pokemon.name.toLowerCase().includes(searchTerm.toLowerCase())) {
-      return false;
+    if (debouncedSearchTerm) {
+      const searchLower = debouncedSearchTerm.toLowerCase();
+      const nameMatch = pokemon.name.toLowerCase().includes(searchLower);
+      // Check if search term is a number and match exactly
+      const searchNumber = parseInt(debouncedSearchTerm);
+      const numberMatch = !isNaN(searchNumber) && pokemon.number === searchNumber;
+      if (!nameMatch && !numberMatch) {
+        return false;
+      }
     }
 
     // Type filter
