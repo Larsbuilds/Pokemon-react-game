@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 import { useEvolutionChain } from '../../hooks/useEvolutionChain'
 import OptimizedImage from '../OptimizedImage'
 import TypeBadge from '../TypeBadge'
@@ -16,7 +17,10 @@ export function EvolutionChain({ pokemonId }) {
     return (
       <div key={chain.id} className="flex items-center">
         {/* Pokemon Card - Contains image and details */}
-        <div className="flex flex-col items-center">
+        <Link 
+          to={`/pokemon/${chain.name}`}
+          className="flex flex-col items-center group transition-transform hover:scale-105"
+        >
           <div className="relative w-40 h-40">
             {/* White circle background */}
             <div className="absolute inset-0 rounded-full bg-white border-2 border-gray-200"></div>
@@ -27,7 +31,7 @@ export function EvolutionChain({ pokemonId }) {
             />
           </div>
           <div className="mt-4 text-center">
-            <div className="text-xl font-bold capitalize text-white">{chain.name}</div>
+            <div className="text-xl font-bold capitalize text-white group-hover:text-blue-300 transition-colors">{chain.name}</div>
             <div className="text-lg text-gray-300">#{chain.id.padStart(4, '0')}</div>
             <div className="flex gap-2 mt-2 justify-center">
               {chain.types?.map(type => (
@@ -35,7 +39,7 @@ export function EvolutionChain({ pokemonId }) {
               ))}
             </div>
           </div>
-        </div>
+        </Link>
 
         {/* Evolution Chain Continuation - Only rendered if this Pokemon evolves */}
         {chain.evolvesTo.length > 0 && (

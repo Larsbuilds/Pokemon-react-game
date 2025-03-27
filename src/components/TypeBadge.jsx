@@ -25,7 +25,7 @@ export default function TypeBadge({ type }) {
   return (
     <span
       style={{ backgroundColor }}
-      className="px-3 py-1 rounded-full text-sm text-white font-medium capitalize
+      className="inline-block px-3 py-1 rounded-full text-sm text-white font-medium capitalize
         transform transition-all duration-200 hover:scale-105 hover:shadow-md
         cursor-default select-none"
     >

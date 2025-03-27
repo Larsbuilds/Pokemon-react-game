@@ -12,7 +12,34 @@ export function usePokemon(name) {
         setLoading(true)
         setError(null)
         const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${name}`)
-        setPokemon(response.data)
+        
+        // Fetch type data for weaknesses
+        const typePromises = response.data.types.map(async (type) => {
+          const typeResponse = await axios.get(type.type.url)
+          return typeResponse.data.damage_relations.double_damage_from.map(w => ({
+            type: w.name,
+            multiplier: 2
+          }))
+        })
+        
+        const weaknessesArrays = await Promise.all(typePromises)
+        const weaknesses = [...new Set(weaknessesArrays.flat().map(JSON.stringify))].map(JSON.parse)
+
+        // Fetch species data for description
+        const speciesResponse = await axios.get(response.data.species.url)
+        const description = speciesResponse.data.flavor_text_entries
+          .find(entry => entry.language.name === 'en')
+          ?.flavor_text
+          .replace(/[\n\f]/g, ' ') || 'No description available.'
+
+        setPokemon({
+          ...response.data,
+          weaknesses,
+          description,
+          category: speciesResponse.data.genera
+            .find(genus => genus.language.name === 'en')
+            ?.genus || 'Unknown'
+        })
       } catch (error) {
         setError(error)
         console.error('Error fetching pokemon:', error)
