@@ -8,6 +8,12 @@ export function usePokemon(name) {
 
   useEffect(() => {
     const fetchPokemon = async () => {
+      if (!name) {
+        setError({ response: { status: 404 } })
+        setLoading(false)
+        return
+      }
+
       try {
         setLoading(true)
         setError(null)

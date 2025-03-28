@@ -5,7 +5,7 @@ import ErrorBoundary from './components/ErrorBoundary'
 
 function App() {
   return (
-    <Router>
+    <Router future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
       <ErrorBoundary>
         <div className="min-h-screen bg-gray-50">
           <header className="bg-gradient-to-r from-pokemon-red to-pokemon-blue text-white shadow-lg sticky top-0 z-50">

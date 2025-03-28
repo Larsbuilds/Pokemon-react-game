@@ -38,6 +38,7 @@ function StatTooltip({ stat, value, description }) {
       }}
       role="tooltip"
       aria-label={description}
+      data-testid={`stat-tooltip-${stat}`}
     >
       <div className="text-gray-600 leading-relaxed">{description}</div>
     </div>
@@ -46,16 +47,16 @@ function StatTooltip({ stat, value, description }) {
 
 function StatsSkeleton() {
   return (
-    <div className="space-y-4">
-      <div className="h-8 w-32 bg-gray-200 rounded animate-pulse" />
+    <div className="space-y-4" data-testid="stats-skeleton">
+      <div className="h-8 w-32 bg-gray-200 rounded animate-pulse" data-testid="skeleton-title" />
       {[...Array(6)].map((_, i) => (
         <div key={i} className="flex items-center">
-          <div className="w-24 h-4 bg-gray-200 rounded animate-pulse" />
+          <div className="w-24 h-4 bg-gray-200 rounded animate-pulse" data-testid="skeleton-label" />
           <div className="flex-1 ml-4">
             <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
-              <div className="h-full bg-gray-200 animate-pulse" style={{ width: '60%' }} />
+              <div className="h-full bg-gray-200 animate-pulse" style={{ width: '60%' }} data-testid="skeleton-bar" />
             </div>
-            <div className="h-4 w-8 bg-gray-200 rounded mt-1 animate-pulse" />
+            <div className="h-4 w-8 bg-gray-200 rounded mt-1 animate-pulse" data-testid="skeleton-value" />
           </div>
         </div>
       ))}
@@ -103,7 +104,7 @@ export function StatsChart({ stats, loading }) {
   const maxStat = Math.max(...stats.map(stat => stat.base_stat))
 
   return (
-    <div className="relative">
+    <div className="relative" data-testid="stats-chart">
       <h2 className="text-2xl font-bold mb-6">Base Stats</h2>
       <div 
         className="space-y-4"
@@ -121,6 +122,7 @@ export function StatsChart({ stats, loading }) {
               className="flex items-center group relative"
               onMouseEnter={() => setHoveredStat(stat.stat.name)}
               onMouseLeave={() => setHoveredStat(null)}
+              data-testid={`stat-row-${stat.stat.name}`}
             >
               <div 
                 className="w-24 text-sm font-medium capitalize cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded px-2 py-1"
@@ -134,11 +136,19 @@ export function StatsChart({ stats, loading }) {
                 }}
                 onFocus={() => setFocusedStat(stat.stat.name)}
                 onBlur={() => setFocusedStat(null)}
+                data-testid={`stat-label-${stat.stat.name}`}
               >
                 {STAT_LABELS[stat.stat.name]}
               </div>
               <div className="flex-1 ml-4 relative">
-                <div className="h-3 bg-gray-100 rounded-full overflow-hidden">
+                <div 
+                  className="h-3 bg-gray-100 rounded-full overflow-hidden"
+                  role="progressbar"
+                  aria-valuenow={stat.base_stat}
+                  aria-valuemin="0"
+                  aria-valuemax="255"
+                  data-testid={`stat-bar-container-${stat.stat.name}`}
+                >
                   <div
                     className={`h-full ${STAT_COLORS[stat.stat.name]} transition-all duration-700 ease-out transform origin-left`}
                     style={{ 
@@ -146,12 +156,14 @@ export function StatsChart({ stats, loading }) {
                       transform: (isHovered || isFocused) ? 'scaleY(1.2)' : 'scaleY(1)',
                       boxShadow: (isHovered || isFocused) ? '0 0 10px rgba(0,0,0,0.2)' : 'none'
                     }}
+                    data-testid={`stat-bar-${stat.stat.name}`}
                   />
                 </div>
                 <div 
                   className={`text-sm mt-1 transition-colors duration-200 ${
                     (isHovered || isFocused) ? 'text-gray-900 font-semibold' : 'text-gray-600'
                   }`}
+                  data-testid={`stat-value-${stat.stat.name}`}
                 >
                   {stat.base_stat}
                 </div>

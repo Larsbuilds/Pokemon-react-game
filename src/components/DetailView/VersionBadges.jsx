@@ -1,45 +1,42 @@
-import React from 'react'
+import React, { useRef } from 'react'
 
 export function VersionBadges({ versions }) {
-  if (!versions) return null;
+  const badgeRefs = useRef([])
+
+  if (!versions || versions.length === 0) {
+    return <div data-testid="version-badges-container" className="flex gap-2" />
+  }
+
+  const handleKeyDown = (event, index) => {
+    if (event.key === 'ArrowRight') {
+      const nextIndex = (index + 1) % versions.length
+      badgeRefs.current[nextIndex]?.focus()
+    } else if (event.key === 'ArrowLeft') {
+      const prevIndex = (index - 1 + versions.length) % versions.length
+      badgeRefs.current[prevIndex]?.focus()
+    }
+  }
 
   return (
-    <div className="flex gap-2">
-      {versions.map(version => (
-        <div 
-          key={version.name}
-          className="relative group"
-        >
-          {/* Version Badge */}
-          <div className={`
-            w-10 h-10 rounded-full border-4 border-white shadow-md 
-            flex items-center justify-center transition-transform duration-300
-            ${version.name.includes('red') 
-              ? 'bg-red-500 hover:bg-red-600' 
-              : 'bg-blue-500 hover:bg-blue-600'
-            }
-            group-hover:scale-110
-          `}>
-            {/* Version Icon */}
-            <div className="w-4 h-4 bg-white rounded-full" />
-          </div>
+    <div data-testid="version-badges-container" className="flex gap-2">
+      {versions.map((version, index) => {
+        // Handle both data structures: { name, url } and { version: { name, url } }
+        const versionName = version.version?.name || version.name
+        const versionKey = version.key || versionName
 
-          {/* Version Name Tooltip */}
-          <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 
-            opacity-0 group-hover:opacity-100 transition-opacity duration-200 
-            bg-gray-800 text-white text-xs rounded px-2 py-1 
-            pointer-events-none whitespace-nowrap z-10"
+        return (
+          <button
+            key={versionKey}
+            ref={el => (badgeRefs.current[index] = el)}
+            data-testid={`version-badge-${versionName}`}
+            className="bg-gray-100 text-gray-800 text-sm font-medium rounded-full px-3 py-1 capitalize hover:bg-gray-200 transition-colors"
+            onKeyDown={e => handleKeyDown(e, index)}
+            tabIndex={0}
           >
-            {version.name.split('-').map(word => 
-              word.charAt(0).toUpperCase() + word.slice(1)
-            ).join(' ')}
-            {/* Tooltip arrow */}
-            <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 
-              w-2 h-2 bg-gray-800 rotate-45"
-            />
-          </div>
-        </div>
-      ))}
+            {versionName}
+          </button>
+        )
+      })}
     </div>
   )
 } 

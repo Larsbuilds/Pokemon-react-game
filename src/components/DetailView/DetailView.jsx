@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useRef, useEffect } from 'react'
 import { usePokemon } from '../../hooks/usePokemon'
 import OptimizedImage from '../OptimizedImage'
 import TypeBadge from '../TypeBadge'
@@ -13,16 +13,43 @@ import { AdditionalInfo } from './AdditionalInfo'
 
 export function DetailView({ pokemonName }) {
   const { pokemon, loading, error } = usePokemon(pokemonName)
+  const sectionRefs = useRef([])
+
+  useEffect(() => {
+    if (sectionRefs.current.length > 0 && sectionRefs.current[0]) {
+      sectionRefs.current[0].tabIndex = 0
+    }
+  }, [loading])
+
+  const handleKeyDown = (e, index) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+      e.preventDefault()
+      const nextIndex = e.key === 'ArrowRight' 
+        ? (index + 1) % sectionRefs.current.length 
+        : (index - 1 + sectionRefs.current.length) % sectionRefs.current.length
+      sectionRefs.current[nextIndex].focus()
+    }
+  }
 
   if (loading) return <LoadingSpinner />
   if (error) return <ErrorMessage message="Failed to load Pokemon details" />
   if (!pokemon) return null
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div 
+      className="container mx-auto px-4 py-8"
+      data-testid="detail-view"
+      role="main"
+      aria-label="Pokemon Details"
+    >
       <div className="bg-white rounded-lg shadow-lg p-8">
         {/* Name and Number */}
-        <div className="mb-6">
+        <div 
+          className="mb-6"
+          ref={el => sectionRefs.current[0] = el}
+          onKeyDown={e => handleKeyDown(e, 0)}
+          tabIndex={0}
+        >
           <h1 className="text-4xl font-bold capitalize mb-2">{pokemon.name}</h1>
           <div className="text-gray-500 text-xl">#{pokemon.id.toString().padStart(3, '0')}</div>
         </div>
@@ -30,7 +57,12 @@ export function DetailView({ pokemonName }) {
         {/* Main Content Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Left Column - Image and Stats */}
-          <div className="space-y-8">
+          <div 
+            className="space-y-8"
+            ref={el => sectionRefs.current[1] = el}
+            onKeyDown={e => handleKeyDown(e, 1)}
+            tabIndex={0}
+          >
             {/* Image */}
             <div className="aspect-square bg-gray-50 rounded-lg p-4 shadow-inner">
               <OptimizedImage
@@ -45,7 +77,12 @@ export function DetailView({ pokemonName }) {
           </div>
 
           {/* Right Column - Description and Info */}
-          <div className="md:col-span-2">
+          <div 
+            className="md:col-span-2"
+            ref={el => sectionRefs.current[2] = el}
+            onKeyDown={e => handleKeyDown(e, 2)}
+            tabIndex={0}
+          >
             {/* Description */}
             <p className="text-lg text-gray-700 mb-8">
               {pokemon.description || "It carries a seed on its back right from birth. As its body grows larger, the seed does too."}
@@ -97,12 +134,23 @@ export function DetailView({ pokemonName }) {
         </div>
 
         {/* Evolution Chain - Full Width */}
-        <div className="mt-8">
+        <div 
+          className="mt-8"
+          ref={el => sectionRefs.current[3] = el}
+          onKeyDown={e => handleKeyDown(e, 3)}
+          tabIndex={0}
+        >
           <EvolutionChain pokemonId={pokemon.id} />
         </div>
 
         {/* Additional Information - Full Width */}
-        <AdditionalInfo pokemon={pokemon} />
+        <div
+          ref={el => sectionRefs.current[4] = el}
+          onKeyDown={e => handleKeyDown(e, 4)}
+          tabIndex={0}
+        >
+          <AdditionalInfo pokemon={pokemon} />
+        </div>
       </div>
     </div>
   )
