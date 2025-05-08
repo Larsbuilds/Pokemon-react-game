@@ -7,33 +7,120 @@ This document provides a detailed overview of the project's file structure and e
 ## Directory Structure
 
 ```
-src/
-├── assets/          # Static assets (images, fonts, etc.)
-├── components/      # Reusable UI components
-│   ├── Search/     # Search-related components
-│   │   ├── SearchBar.jsx
-│   │   └── TypeBadge.jsx
-│   ├── Pokemon/    # Pokemon-related components
-│   │   ├── PokemonCard.jsx
-│   │   └── PokemonDetail.jsx
-│   └── UI/         # Shared UI components
-│       ├── Button.jsx
-│       ├── Loading.jsx
-│       └── ErrorBoundary.jsx
-├── pages/          # Page-level components
-├── hooks/          # Custom React hooks
-├── utils/          # Utility functions and constants
-│   ├── api.js      # API utilities
-│   ├── typeColors.js
-│   └── formatters.js
-├── constants/      # Constant values and configurations
-├── App.jsx         # Main application component
-└── main.jsx        # Application entry point
+project-root/
+├── frontend/                # React frontend application
+│   ├── src/
+│   │   ├── assets/         # Static assets (images, fonts, etc.)
+│   │   ├── components/     # Reusable UI components
+│   │   │   ├── Search/    # Search-related components
+│   │   │   │   ├── SearchBar.jsx
+│   │   │   │   └── TypeBadge.jsx
+│   │   │   ├── Pokemon/   # Pokemon-related components
+│   │   │   │   ├── PokemonCard.jsx
+│   │   │   │   └── PokemonDetail.jsx
+│   │   │   ├── Battle/    # Battle-related components
+│   │   │   │   ├── BattleArena.jsx
+│   │   │   │   ├── BattleControls.jsx
+│   │   │   │   ├── BattleLog.jsx
+│   │   │   │   └── BattleStats.jsx
+│   │   │   ├── Roster/    # Roster management components
+│   │   │   │   ├── RosterList.jsx
+│   │   │   │   └── RosterControls.jsx
+│   │   │   └── UI/        # Shared UI components
+│   │   │       ├── Button.jsx
+│   │   │       ├── Loading.jsx
+│   │   │       └── ErrorBoundary.jsx
+│   │   ├── pages/         # Page-level components
+│   │   │   ├── Home.jsx
+│   │   │   ├── Detail.jsx
+│   │   │   ├── Battle.jsx
+│   │   │   ├── Roster.jsx
+│   │   │   └── Leaderboard.jsx
+│   │   ├── hooks/         # Custom React hooks
+│   │   │   ├── usePokemon.js
+│   │   │   ├── useBattle.js
+│   │   │   ├── useRoster.js
+│   │   │   └── useLeaderboard.js
+│   │   ├── utils/         # Utility functions and constants
+│   │   │   ├── api.js
+│   │   │   ├── typeColors.js
+│   │   │   ├── battleLogic.js
+│   │   │   └── formatters.js
+│   │   ├── constants/     # Constant values and configurations
+│   │   ├── App.jsx        # Main application component
+│   │   └── main.jsx       # Application entry point
+│   └── public/            # Public assets
+│
+├── backend/               # Express backend application
+│   ├── src/
+│   │   ├── config/       # Configuration files
+│   │   │   ├── database.js
+│   │   │   └── environment.js
+│   │   ├── models/       # Mongoose models
+│   │   │   └── Leaderboard.js
+│   │   ├── routes/       # API routes
+│   │   │   └── leaderboard.js
+│   │   ├── controllers/  # Route controllers
+│   │   │   └── leaderboardController.js
+│   │   ├── middleware/   # Custom middleware
+│   │   │   ├── errorHandler.js
+│   │   │   └── validation.js
+│   │   ├── utils/        # Utility functions
+│   │   │   ├── database.js
+│   │   │   └── validation.js
+│   │   └── app.js        # Express application setup
+│   ├── tests/            # Backend tests
+│   │   ├── unit/
+│   │   └── integration/
+│   └── package.json
+│
+└── docs/                 # Project documentation
+    ├── SRS.md
+    ├── PROJECT_STRUCTURE.md
+    └── NEXT_STEPS_IMPLEMENTATION_PLAN.md
 ```
 
-## Current Components
+## Frontend Components
 
-### Pokemon Components
+### Battle Components
+#### BattleArena (`components/Battle/BattleArena.jsx`)
+- Main battle interface component
+- Displays battling Pokémon
+- Shows health bars and status effects
+- Handles battle animations
+
+#### BattleControls (`components/Battle/BattleControls.jsx`)
+- Battle action controls
+- Move selection interface
+- Battle state management
+- Turn-based battle logic
+
+#### BattleLog (`components/Battle/BattleLog.jsx`)
+- Displays battle history
+- Shows move effects and results
+- Implements scrolling log
+- Battle event tracking
+
+#### BattleStats (`components/Battle/BattleStats.jsx`)
+- Shows detailed battle statistics
+- Displays type advantages
+- Shows current status effects
+- Battle progress tracking
+
+### Roster Components
+#### RosterList (`components/Roster/RosterList.jsx`)
+- Displays user's Pokémon roster
+- Implements drag-and-drop reordering
+- Shows roster statistics
+- Handles roster size limits
+
+#### RosterControls (`components/Roster/RosterControls.jsx`)
+- Add/remove Pokémon functionality
+- Roster validation
+- Roster persistence
+- Roster size management
+
+### Existing Components
 #### PokemonCard (`components/Pokemon/PokemonCard.jsx`)
 - Displays individual Pokemon information in a card format
 - Shows Pokemon image, name, and types
@@ -49,7 +136,6 @@ src/
 - Displays stats, abilities, and other Pokemon data
 - ✅ Basic implementation complete
 
-### Search Components
 #### SearchBar (`components/Search/SearchBar.jsx`)
 - Provides search functionality for filtering Pokemon
 - Implements real-time search with debouncing
@@ -64,77 +150,45 @@ src/
 - Implements type-specific colors
 - Used in both PokemonCard and search filters
 
-### UI Components [Planned]
-- Button.jsx - Reusable button component
-- Loading.jsx - Loading states and spinners
-- ErrorBoundary.jsx - Error handling component
+#### Button.jsx - Reusable button component
+#### Loading.jsx - Loading states and spinners
+#### ErrorBoundary.jsx - Error handling component
 
-## Pages
+## Backend Components
 
-### Home (`pages/Home.jsx`)
-- Main landing page displaying Pokemon grid
-- ✅ Implemented features:
-  - Basic grid layout
-  - Infinite scroll
-  - Search integration
-  - Loading states
-  - Error handling
-- 🔄 Planned enhancements:
-  - Performance optimizations
-  - Enhanced error states
-  - Loading skeletons
+### Models
+#### Leaderboard (`models/Leaderboard.js`)
+- MongoDB schema for leaderboard entries
+- Data validation
+- Index configuration
+- Timestamp handling
 
-### Detail (`pages/Detail.jsx`)
-- Detailed Pokemon information page
-- ✅ Basic implementation complete
-- 🔄 Future enhancements planned in Phase 4
+### Routes
+#### Leaderboard Routes (`routes/leaderboard.js`)
+- GET /leaderboard endpoint
+- POST /leaderboard endpoint
+- Request validation
+- Error handling
 
-## Hooks
+### Controllers
+#### Leaderboard Controller (`controllers/leaderboardController.js`)
+- Leaderboard data management
+- Score calculation
+- Data validation
+- Error handling
 
-### Current Hooks
-#### usePokemon (`hooks/usePokemon.js`)
-- Handles Pokemon data fetching
-- Implements caching and error handling
-- ✅ Basic implementation complete
+### Middleware
+#### Error Handler (`middleware/errorHandler.js`)
+- Global error handling
+- Error response formatting
+- Logging
+- Client error handling
 
-### Planned Hooks
-#### useDebounce (`hooks/useDebounce.js`)
-- Debouncing functionality for search
-- Performance optimization for API calls
-
-#### usePokemonFilters (`hooks/usePokemonFilters.js`) [Future]
-- Advanced search state management
-- Filter combinations and persistence
-
-## Utils & Constants
-
-### API Utilities (`utils/api.js`)
-- Pokemon API integration
-- Error handling and response formatting
-- ✅ Basic implementation complete
-- 🔄 Planned enhancements for advanced features
-
-### Type Colors (`utils/typeColors.js`) [Planned]
-- Color definitions for Pokemon types
-- Consistent styling across components
-
-### Formatters (`utils/formatters.js`) [Planned]
-- Number formatting (#0001)
-- Text formatting utilities
-- Data transformation helpers
-
-## Configuration Files
-
-### Vite Config (`vite.config.js`)
-- Build settings and optimizations
-- Plugin configuration
-- ✅ Basic setup complete
-
-### Tailwind Config (`tailwind.config.js`)
-- Custom theme settings
-- Color palette configuration
-- ✅ Basic setup complete
-- 🔄 Planned updates for type colors
+#### Validation (`middleware/validation.js`)
+- Request validation
+- Data sanitization
+- Schema validation
+- Error reporting
 
 ## Development Guidelines
 
@@ -169,6 +223,7 @@ src/
 
 ## Testing Strategy
 
+### Frontend Testing
 1. **Component Testing**
    - Unit tests for utilities
    - Integration tests for features
@@ -182,4 +237,38 @@ src/
 3. **Error Handling**
    - Test error boundaries
    - Validate error states
-   - Check recovery mechanisms 
+   - Check recovery mechanisms
+
+### Backend Testing
+1. **Unit Testing**
+   - Model validation
+   - Controller logic
+   - Utility functions
+   - Middleware behavior
+
+2. **Integration Testing**
+   - API endpoints
+   - Database operations
+   - Error handling
+   - Authentication flow
+
+3. **Performance Testing**
+   - Database query optimization
+   - API response times
+   - Connection handling
+   - Load testing
+
+## Deployment Structure
+
+### Frontend Deployment
+- Vite build configuration
+- Environment variables
+- Asset optimization
+- Route handling
+
+### Backend Deployment
+- Express server configuration
+- MongoDB connection
+- Environment setup
+- Error handling
+- Logging configuration 
